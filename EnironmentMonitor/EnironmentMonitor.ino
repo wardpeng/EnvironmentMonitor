@@ -10,6 +10,7 @@
 #include "Light.h"
 #include "AQM300.h"
 #include "BME280.h"
+#include "GP2Y10.h"
 
 #define OXY_SERIAL Serial1
 
@@ -64,6 +65,9 @@ void setup()
 
 	//Pressure init
 	initBME280();
+
+	//Dust sensor
+	initGP2Y10();
 
 	// see if the card is present and can be initialized:
 	if (!SD.begin(chipSelect))
