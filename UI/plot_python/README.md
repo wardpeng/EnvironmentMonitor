@@ -1,5 +1,25 @@
 # [python之matplotlib绘图基础](http://www.cnblogs.com/liutongqing/p/6985805.html)
 
+![2018-05-13.png](../..//doc/pictures/2018-05-13.png "2018-05-13.png")
+
+
+
+
+
+
+
+参考：
+
+[python之matplotlib绘图基础](http://www.cnblogs.com/liutongqing/p/6985805.html)
+
+Python--matplotlib绘图可视化知识点整理https://www.cnblogs.com/zhizhan/p/5615947.html
+
+python matplotlib 绘制双Y轴曲线图https://blog.csdn.net/autoliuweijie/article/details/51594373
+
+时间格式化 https://blog.csdn.net/qianshuyuankk/article/details/79310463
+
+设置时间间隔 https://blog.csdn.net/ZengHaihong/article/details/70747247
+
 # Python之matplotlib基础
 
 matplotlib是Python优秀的数据可视化第三方库
@@ -254,7 +274,7 @@ posted on 2017-06-11 18:03 [tongqingliu](http://www.cnblogs.com/liutongqing/) �
 
 - ------
 
-  ------
+------
 
   Since 2017.10.24:
 
@@ -264,13 +284,13 @@ posted on 2017-06-11 18:03 [tongqingliu](http://www.cnblogs.com/liutongqing/) �
 
   [![AmazingCounters.com](https://cc.amazingcounters.com/counter.php?i=3217922&c=9654079)](http://www.amazingcounters.com/)
 
-  ------
+------
 
    
 
   ![点击这里给我发消息](http://wpa.qq.com/pa?p=2:1355583269:51)
 
-  ------
+------
 
   tongqingliu
 
