@@ -3,8 +3,8 @@
 
 #include "Arduino.h"
 
-#define AQM_A_PIN 5
-#define AQM_B_PIN 4
+#define AQM_A_PIN 36
+#define AQM_B_PIN 38
 
 //0-0.5ppm:A0B0
 #define VOC_0_05_PPM 0

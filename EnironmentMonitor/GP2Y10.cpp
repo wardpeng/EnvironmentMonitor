@@ -1,7 +1,7 @@
 #include "GP2Y10.h"
 
-int measurePin = A5;
-int ledPower = 12;
+int measurePin = A15;
+int ledPower = 2;
 
 const unsigned int samplingTime = 280;
 const unsigned int deltaTime = 40;
@@ -35,15 +35,14 @@ float getDustDensity()
 		dustDensity = 0.00;
 	}
 
-//	  Serial.println("Raw Signal Value (0-1023):");
+//	  Serial.print("Raw Signal Value (0-1023):");
 //	  Serial.println(voMeasured);
 //
-//	  Serial.println("Voltage:");
+//	  Serial.print("Voltage:");
 //	  Serial.println(calcVoltage);
 //
-//	  Serial.println("Dust Density:");
+//	  Serial.print("Dust Density:");
 //	  Serial.println(dustDensity);
 
 	return dustDensity;
 }
-

@@ -9,6 +9,11 @@
 #define LOGO_X 5
 #define LOGO_Y 10
 
+//File name display
+#define FILENAME_HZ_INDEX 19
+#define FILENAME_X 330 
+#define FILENAME_Y 20 
+
 //For count display
 #define COUNT_HZ_INDEX 2
 #define COUNT_X 600
@@ -53,6 +58,11 @@
 #define NOTE_HZ_INDEX 18
 #define NOTE_X 450
 #define NOTE_Y 135
+
+//For Dust(GP2Y10) security note display
+#define GP2Y10_HZ_INDEX 1000
+#define GP2Y10_X 5
+#define GP2Y10_Y 410
 
 void clearDisp(void);
 void LcdDisplay(int posX, int posY, int size, char *d, int iColor);

@@ -12,13 +12,14 @@
 #include "BME280.h"
 #include "GP2Y10.h"
 
+
 #define OXY_SERIAL Serial1
 
 #define DEBUG_SERIAL 1//调试信息，发送到串口
 #define PRINTF_TO_SERIAL 1//正常工作时将调试信息，发送到串口
 
-char Title[200] =
-		"Number,Date,Time,Press1,Press2,Press3,Voltage,Current,Power,Power_consumption,T1,T2,T3,T4,T5,T6,T7,T8,T9,T10,T11,T12,T13,T14,T15,T16,T17,T18,T19,T20,H1,H2";
+//0,2018-05-12 12:11:50,0.0817,24,25.51,48,     5,1008.78
+char Title[200] = "Number,Time,Oxy,Temperature1,Temperature2,Huminity,Lux,Atmospheric Pressure,";
 
 /*DS18B20(byte pin)  连接管脚*/
 //传感器设定为10位模式，每次转换时间<187.5ms,如果需要12位模式，请修改库文件of ds.set(0x7F);
@@ -27,18 +28,16 @@ DS18B20_S Ds0(DS_PIN);  //pin DS_PIN
 
 /*湿度传感器*/
 dht11 DHT11;
-#define DHT_PIN 8//湿度传感器
+#define DHT_PIN 11//湿度传感器
 
 /*时钟模块*/
 DS3231 Clock;
 
-char DateFlieName[30];  //使用时间命名txt文件名
-
-/*压力传感器*/
-#define PRES_PIN 0//气压传感器开始的模拟量引脚
-
+char* DateFlieName="05031230.txt";  //使用时间命名txt文件名 !!!!! <<<<<Length liminit>>!!!!
+//char* DateFlieName="test20180512112030.txt";  //使用时间命名txt文件名
 const int chipSelect = 10;  //SD卡的使能引脚
 File myFile;
+boolean bCardPresented = true;
 
 void setup()
 {
@@ -74,41 +73,58 @@ void setup()
 	{
 		Serial.println("Card failed, or not present");
 		// don't do anything more:
-		return;
+		bCardPresented = false;
 	}
-	Serial.println("card initialized.");
 
 	printDirectory(SD.open("/"), 0);
 
 	Serial.println("printDirectory done!");
 
 	//开机获取时间，用于命名文件，存放在DateFlieName中
-	getDateFlieName();
-	Serial.println(DateFlieName);
-	writeToSD(Title, DateFlieName);  //打印表头
-	Serial.println(Title);
-
+        if(bCardPresented)
+        {
+          getDateFlieName();
+       	  Serial.println(DateFlieName);
+          writeToSD(getMetadata(), DateFlieName);  //打印表头
+  	  writeToSD(Title, DateFlieName);  //打印表头
+  	  Serial.println(Title);
+        }
 }
-
+unsigned long int index = 0;
+unsigned long int recordIndex = 0;
+String strWriteToSd="";
 void loop()
 {
-	unsigned long int index = 0;
-	if (index % 5 == 0)
-	{
-		displayAndGetStoreageString(index);
-		delay(100);
-		index++;
+	if (index % 3 == 0)
+	{  
+                strWriteToSd = displayAndGetStoreageString(recordIndex);
+		Serial.println(strWriteToSd);
 	}
+
+        if(index%10 == 0)
+        {
+          recordIndex++;
+          writeToSD(strWriteToSd, DateFlieName);//Write all data to sd 
+        }
+        delay(100);	  
+        index++;
 }
 
 String displayAndGetStoreageString(unsigned long int storeageCounter)
 {
-	char temp_buf[50];
+	char temp_buf[50]="";
+        char oxy_buf[50]="0";
+        char dust_buf[10]="0";
 	String tempStr = "";
 	String dataWriteToFileStr = "";
 
 	// logo
 	LcdDisplay(LOGO_X, LOGO_Y, 48, hz[LOGO_HZ_INDEX], 10);
+        //Crrent File name
+        if(bCardPresented)
+          LcdDisplay(FILENAME_X, FILENAME_Y, 24, DateFlieName, 16);
+        else
+          LcdDisplay(FILENAME_X, FILENAME_Y, 24, hz[FILENAME_HZ_INDEX], 1);
 	//(室内安全范围密闭1小时<0.08mg/m³)
 	LcdDisplay(NOTE_X, NOTE_Y, 24, hz[NOTE_HZ_INDEX], 16);
 
@@ -129,15 +145,15 @@ String displayAndGetStoreageString(unsigned long int storeageCounter)
 	//甲醛浓度: display and storeage.
 	LcdDisplay(OXY_X, OXY_Y, 48, hz[OXY_HZ_INDEX], 1);
 	float oxy = getOxymethylene();
-	Serial.print("oxy:");
-	Serial.println(oxy); //发送数据
+//	Serial.print("oxy:");
+//	Serial.println(oxy); //发送数据
 	if (oxy > 0.0)
 	{
-		dtostrf(oxy, 1, 4, temp_buf); //将float转换为数组
-		LcdDisplay(OXY_X + 150, OXY_Y, 48, temp_buf, 12); // oxy
+		dtostrf(oxy, 1, 4, oxy_buf); //将float转换为数组
 	}
+        LcdDisplay(OXY_X + 150, OXY_Y, 48, oxy_buf, 12); // oxy
 	LcdDisplay(OXY_X + 150 + 170, OXY_Y, 48, hz[OXY_HZ_INDEX + 1], 1); // mg/m³
-	dataWriteToFileStr += temp_buf;  //String data write to file.
+	dataWriteToFileStr += oxy_buf;  //String data write to file.
 	dataWriteToFileStr += ",";
 
 	//Temprature: display and storeage.
@@ -154,6 +170,7 @@ String displayAndGetStoreageString(unsigned long int storeageCounter)
 	dataWriteToFileStr += temp_buf;  //String data write to file.
 	dataWriteToFileStr += ",";
 
+        //Huminity
 	LcdDisplay(HUMI_X, HUMI_Y, 48, hz[HUMI_HZ_INDEX], 1);              //湿度：
 	dtostrf(DHT11.humidity, 2, 0, temp_buf);
 	LcdDisplay(HUMI_X + 150, HUMI_Y, 48, temp_buf, 12);    // DHT11.humidity
@@ -162,10 +179,11 @@ String displayAndGetStoreageString(unsigned long int storeageCounter)
 	dataWriteToFileStr += ",";
 
 	LcdDisplay(LIGHT_X, LIGHT_Y, 48, hz[LIGHT_HZ_INDEX], 1); //光照:
-	dtostrf(readLight(), 6, 0, temp_buf);
+        uint16_t lux = readLight();
+	dtostrf(lux, 6, 0, temp_buf);
 	LcdDisplay(LIGHT_X + 150, LIGHT_Y, 48, temp_buf, 12);  //light
 	LcdDisplay(LIGHT_X + 150 + 170, LIGHT_Y, 48, hz[LIGHT_HZ_INDEX + 1], 1); //%
-	dataWriteToFileStr += temp_buf;  //String data write to file.
+    	dataWriteToFileStr += lux;  //String data write to file.
 	dataWriteToFileStr += ",";
 
 	LcdDisplay(VOC_X, VOC_Y, 48, hz[VOC_HZ_INDEX], 1); //Voc
@@ -177,8 +195,15 @@ String displayAndGetStoreageString(unsigned long int storeageCounter)
 	LcdDisplay(BME_X + 150, BME_Y, 48, temp_buf, 12);
 	LcdDisplay(BME_X + 150 + 170, BME_Y, 48, hz[BME_HZ_INDEX + 1], 1);
 	dataWriteToFileStr += temp_buf;  //String data write to file.
-//	dataWriteToFileStr += ",";
+	dataWriteToFileStr += ",";
 
+	//GP2Y10 Dust
+        LcdDisplay(GP2Y10_X, GP2Y10_Y, 48, "PM2.5: ", 1);              //湿度：
+        float dust = getDustDensity();
+        if(dust>0)
+          dtostrf(dust, 6, 2, dust_buf);
+	LcdDisplay(GP2Y10_X + 150 , GP2Y10_Y, 48, dust_buf, 16); 
+	dataWriteToFileStr += dust_buf;  //String data write to file.
 	return dataWriteToFileStr;
 }
 
@@ -206,35 +231,32 @@ String getDateFlieName(void)  //保存在全局变量DateFlieName中
 	String timeStr = "";
 	//name length limit?
 	//snprintf(DateFlieName, 13, "File%02d.txt", Clock.getMinute());
-	snprintf(DateFlieName, 13, "20%2d-%02d-%02d_%02d:%02d:%2d.txt",
-			Clock.getYear(), Clock.getMonth(Century), Clock.getDate(),
-			Clock.getHour(h12, PM), Clock.getMinute(), Clock.getSecond());
+      //char DateFlieName[24]="2018-05-12-11:20:30.txt";  //使用时间命名txt文件名
+        snprintf(DateFlieName,13,"%02d%02d%02d%02d.txt",Clock.getMonth(Century), Clock.getDate(),
+			Clock.getHour(h12, PM), Clock.getMinute());    
+
 	timeStr += DateFlieName;
 	return timeStr;
 }
 
-void writeToSD(char *databuf, char *filename)
+String getMetadata(void)
 {
-	myFile = SD.open(filename, FILE_WRITE);
-	if (myFile)
-	{
-		myFile.println(databuf);
-		myFile.close();
-		if (DEBUG_SERIAL)
-			Serial.println(databuf);
-	}
-	// if the file isn't open, pop up an error:
-	else
-	{
-		if (DEBUG_SERIAL)
-		{
-			Serial.print("error opening: ");
-			Serial.println(filename);
-		}
-	}
+      String strMetadata = "metadata:";
+      char* tempBuf="2018-05-12 12:55:30";
+    
+  	bool h12;
+	bool PM;
+	bool Century = false;
+        snprintf(tempBuf,20,"20%02d-%02d-%02d %02d:%02d:%02d", Clock.getYear(), Clock.getMonth(Century), Clock.getDate(),
+			Clock.getHour(h12, PM), Clock.getMinute(), Clock.getSecond());    
 
+	strMetadata += tempBuf;
+
+  return strMetadata;
 }
-void writeToSD(String str, char *filename)
+
+
+void writeToSD(String str, char* filename)
 {
 	myFile = SD.open(filename, FILE_WRITE);
 	if (myFile)
@@ -252,6 +274,7 @@ void writeToSD(String str, char *filename)
 			Serial.print("error opening: ");
 			Serial.println(filename);
 		}
+        bCardPresented = false;
 	}
 
 }
@@ -342,8 +365,8 @@ float getOxymethylene(void)  //get oxymethylene:DART WZ-S sensor
 			buf[index++] = inChar;
 		}
 	}
-	Serial.print("index:");
-	Serial.println(index); //发送数据
+//	Serial.print("index:");
+//	Serial.println(index); //发送数据
 
 	if (index >= 9) //9个数据
 	{
@@ -387,38 +410,13 @@ void printDirectory(File dir, int numTabs)
 
 void setClock()
 {
-	Clock.setSecond(00);			//Set the second
-	Clock.setMinute(56);			//Set the minute
-	Clock.setHour(22);  //Set the hour
-	Clock.setDoW(5);    //Set the day of the week
-	Clock.setDate(5);  //Set the date of the month
+	Clock.setSecond(0);			//Set the second
+	Clock.setMinute(59);			//Set the minute
+	Clock.setHour(9);  //Set the hour
+	Clock.setDoW(6);    //Set the day of the week
+	Clock.setDate(12);  //Set the date of the month
 	Clock.setMonth(5);  //Set the month of the year
 	Clock.setYear(18);  //Set the year (Last two digits of the year)
 }
 
-void getAllInfo(char *buf)
-{
-
-	//float pressure_f;//BMP280
-//	float humidity_f;		//HT11
-//	float temperature_f;	//HT11
-//	float ds_f;				//18B20
-//	char temp_buf[50];
-//
-//	dtostrf(storeageCounter, 10, 0, temp_buf);  //将float转换为数组//此条信息的序号
-//	strcat(buf, temp_buf);
-//	strcat(buf, ",");  //逗号，分割每条信息
-//
-//	getTime(temp_buf);  //时间信息
-//
-//	strcat(buf, temp_buf);
-//	strcat(buf, ",");
-
-//	pressure_f = GetPressure();
-//
-//	ds_f = Get18B20();
-//
-//	humidity_f = GetHumidity();
-
-}
 
