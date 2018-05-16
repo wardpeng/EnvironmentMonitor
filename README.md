@@ -4,7 +4,7 @@
 
 ## Plot
 
-![05140814-livingRoom-hermetic-after-24h-all-p300](UI\plot_python\pictures\livingRoom\05140814-livingRoom-hermetic-after-24h-all-p300.png)
+![05140814-livingRoom-hermetic-after-24h-all-p300](UI/plot_python/pictures/livingRoom/05140814-livingRoom-hermetic-after-24h-all-p300.png)
 
 
 
