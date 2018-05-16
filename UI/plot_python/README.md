@@ -1,6 +1,22 @@
 # [python之matplotlib绘图基础](http://www.cnblogs.com/liutongqing/p/6985805.html)
 
-![2018-05-13.png](../..//doc/pictures/2018-05-13.png "2018-05-13.png")
+# Plot
+
+## Main bed room
+
+### 05121609-mainBedroom-hermetic-after-24h-all-p100
+
+![2018-05-13-Main_Bedroom-Hermetic-24H-All](/pictures/mainBedroom/05121609-mainBedroom-hermetic-after-24h-all-p100.png)
+
+### 05150849-mainBedroom-hermetic-after-24h-partly-p1
+
+![05150849-mainBedroom-hermetic-after-24h-partly-p1](/pictures/mainBedroom/05150849-mainBedroom-hermetic-after-24h-partly-p1.png)
+
+## Living Room
+
+### 05140814-livingRoom-hermetic-after-24h-all-p300
+
+![2018-05-14-Living_Room-Hermetic-24H-All](/pictures/livingRoom/05140814-livingRoom-hermetic-after-24h-all-p300.png)
 
 
 
@@ -8,7 +24,7 @@
 
 
 
-参考：
+# 参考：
 
 [python之matplotlib绘图基础](http://www.cnblogs.com/liutongqing/p/6985805.html)
 

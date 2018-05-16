@@ -1,0 +1,56 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:form="sap.ui.layout.form"
+	xmlns:smartform="sap.ui.comp.smartform" xmlns:smartField="sap.ui.comp.smartfield" xmlns:layout="sap.ui.layout"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:smartTable="sap.ui.comp.smarttable"
+	xmlns:extension="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+	controllerName="sap.grc.acs.aud.docworkpaper.block.controller.ReviewNotes">
+	<smartTable:SmartTable xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.m.semantic" xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
+		xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:smartTable="sap.ui.comp.smarttable"
+		id="dimSmartTable" entitySet='GRCAUD_CV_NoteByAuditDocWPA' tableType="ResponsiveTable" useVariantManagement="false"
+		useTablePersonalisation="true" showRowCount="false" persistencyKey="smartFilterBarADTBL_Dim" noData="{i18n>labelNoData}"
+		useExportToExcel="false" enableAutoBinding="true" width="auto" beforeRebindTable="onBeforeRebindTable"
+		requestAtLeastFields="AuditGroup,Type,Status,Text,CreatedByFullName"
+		ignoredFields="DBKey,HostBOKey,HostNodeKey,HostKey,ParentNote,CreatedAt,CreatedBy,ChangedAt,ChangedBy,ChangedByFullName,CreatedByFullName"
+		tableBindingPath="to_Notes">
+		<smartTable:customToolbar id="revCustomerToolBar">
+			<OverflowToolbar design="Transparent">
+				<Title text="{i18n>auditSectionTitle}" visible="false"/>
+				<ToolbarSpacer/>
+				<SearchField showSearchButton="true" search=".onSearch" width="15rem"/>
+			</OverflowToolbar>
+		</smartTable:customToolbar>
+		<Table id="revTable" growing="true">
+			<columns>
+				<Column id="colPerson" vAlign="Middle" hAlign="Left" width="auto" mergeDuplicates="true">
+					<customData>
+						<core:CustomData key="p13nData"
+							value='\{"columnKey": "CreatedBy", "sortProperty": "CreatedBy", "filterProperty": "CreatedBy", "columnIndex":"0", "type":"string"}'/>
+					</customData>
+					<Text text="{i18n>colPerson}"/>
+				</Column>
+				<Column id="colNotes" vAlign="Middle" hAlign="Left" width="auto">
+					<customData>
+						<core:CustomData key="p13nData"
+							value='\{"columnKey": "Text", "sortProperty": "Text", "filterProperty": "Text", "columnIndex":"1", "type":"string"}'/>
+					</customData>
+					<Text text="{i18n>colNotes}"/>
+				</Column>
+				<Column id="colReview" vAlign="Middle" hAlign="Left" width="auto">
+					<customData>
+						<core:CustomData key="p13nData"
+							value='\{"columnKey": "Status", "sortProperty": "Status", "filterProperty": "Status", "columnIndex":"2", "type":"string"}'/>
+					</customData>
+					<Text text="{i18n>colReview}"/>
+				</Column>
+			</columns>
+			<items>
+				<ColumnListItem type="Navigation" press="onPressRow">
+					<cells>
+						<ObjectIdentifier text="{CreatedByFullName}"/>
+						<Text text="{Text}"/>
+						<core:Icon src="{parts:['Status'],formatter:'.formatStatus'}" size="1.5em" color="{path:'Status', formatter:'.formatColor'}"/>
+					</cells>
+				</ColumnListItem>
+			</items>
+		</Table>
+	</smartTable:SmartTable>
+</mvc:View>
