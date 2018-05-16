@@ -1,10 +1,14 @@
 ### OurHome Environment Monitor
 
-## Will continue to fix it.
+## Working
+
+## Plot
+
+![05140814-livingRoom-hermetic-after-24h-all-p300](UI\plot_python\pictures\livingRoom\05140814-livingRoom-hermetic-after-24h-all-p300.png)
 
 
 
-`V1.0`
+## Hardware
 
 ![](/doc/pictures/EnvironmentMonitor/1.jpg)
 
