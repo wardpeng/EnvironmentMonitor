@@ -4,6 +4,7 @@ from datetime import datetime
 import matplotlib.dates as mdate
 import time  
 import os
+import scipy.signal as signal
 
 RECORD_NAME = "05150853-livingRoom-open-12h-hermetic-12h"
 # ROOM = "slaveBedroom"
@@ -93,7 +94,8 @@ plt.xlabel('Time', size=12)
 plt.ylabel('Temperature & Lux', size=12)
 plt.grid()  
  
-plt.plot(date_time, temp, color='b', linestyle='-', label='Temperature')  
+temp  = signal.medfilt(hcho,3)  # @UndefinedVariable
+plt.plot(date_time, temp, color='g', linestyle='-', label='Temperature')  
 # ax2.plot(date_time, lux, color='r', linestyle='-', label='Lux')  
 plt.legend(loc='lower left')
  
@@ -103,7 +105,7 @@ plt.gca().xaxis.set_major_formatter(mdate.DateFormatter('%m-%d %H:%M:%S'))  # �
  
 # Right y 
 ax2 = plt.twinx()  # this is the important function
-ax2.plot(date_time, lux, color='r', linestyle='-', label='Lux')  
+ax2.plot(date_time,signal.medfilt(lux,3) , color='r', linestyle='-', label='Lux')  # @UndefinedVariable
 ax2.legend(loc='lower right')  
  
 # 设置X轴的坐标刻度线显示间隔
@@ -111,6 +113,6 @@ ax2.xaxis.set_tick_params(rotation=45, labelsize=12)
 ax2.xaxis.set_major_formatter(mdate.DateFormatter('%m-%d %H:%M:%S'))  # 设置时间标签显示格式
 
 plt.gcf().set_size_inches(18.5, 10.5)
-plt.savefig(PICTURE_PNG_FILE_NAME, format='png', dpi=300)   
+# plt.savefig(PICTURE_PNG_FILE_NAME, format='png', dpi=300)   
 print("ploting*****************************")
 plt.show() 
