@@ -1,6 +1,4 @@
-# [python之matplotlib绘图基础](http://www.cnblogs.com/liutongqing/p/6985805.html)
-
-# Plot
+# Plot the records with python
 
 ## Main bed room
 
