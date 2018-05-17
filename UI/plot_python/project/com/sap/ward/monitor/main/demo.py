@@ -5,13 +5,13 @@ import matplotlib.dates as mdate
 import time  
 import os
 
-RECORD_NAME = "05150853-livingRoom-open-12h-hermetic-12h"
+RECORD_NAME = "05161946-livingRoom-hermetic-after-24h-all"
 # ROOM = "slaveBedroom"
 # ROOM = "mainBedroom"
 ROOM = "livingRoom"
 # ROOM = "kitchen"
 
-AVERAGE = 100
+AVERAGE = 50
 
 PLOT_PYTHON_PATH = os.path.abspath('../../../../../../')
 RECORD_TXT_FILE_NAME = PLOT_PYTHON_PATH + "\\records" + "\\" + ROOM + "\\" + RECORD_NAME + ".TXT"
