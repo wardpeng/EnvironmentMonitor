@@ -2,7 +2,7 @@
 //This is a automatic generated file
 //Please do not modify this file
 //If you touch this file your change will be overwritten during the next build
-//This file has been generated on 2018-05-09 12:51:58
+//This file has been generated on 2018-06-01 16:38:56
 
 #include "Arduino.h"
 #include <SD.h>
@@ -24,8 +24,8 @@ void loop() ;
 String displayAndGetStoreageString(unsigned long int storeageCounter) ;
 String getTime() ;
 String getDateFlieName(void)   ;
-void writeToSD(char *databuf, char *filename) ;
-void writeToSD(String str, char *filename) ;
+String getMetadata(void) ;
+void writeToSD(String str, char* filename) ;
 float Get18B20(void) ;
 float GetPressure(void) ;
 float GetHumidity(void)   ;
@@ -33,7 +33,6 @@ float GetTemperature(void)   ;
 float getOxymethylene(void)   ;
 void printDirectory(File dir, int numTabs) ;
 void setClock() ;
-void getAllInfo(char *buf) ;
 
 
 #include "EnironmentMonitor.ino"

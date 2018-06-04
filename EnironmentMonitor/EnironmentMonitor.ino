@@ -29,6 +29,8 @@ DS18B20_S Ds0(DS_PIN);  //pin DS_PIN
 /*湿度传感器*/
 dht11 DHT11;
 #define DHT_PIN 11//湿度传感器
+dht11 DHT11_2;
+#define DHT_PIN_2 8//湿度传感器
 
 /*时钟模块*/
 DS3231 Clock;
@@ -164,6 +166,7 @@ String displayAndGetStoreageString(unsigned long int storeageCounter)
 	LcdDisplay(TEMP_X + 150 + 80, TEMP_Y, 48, hz[TEMP_HZ_INDEX + 1], 1); //C
 	dataWriteToFileStr += temp_buf;  //String data write to file.
 	dataWriteToFileStr += ",";
+
 	//BME280 Temperature
 	dtostrf(getTemperatureBME280(), 2, 2, temp_buf);
 	LcdDisplay(TEMP_X + 150 + 80 + 80, TEMP_Y, 24, temp_buf, 16); //BME280 Temperature
@@ -187,7 +190,7 @@ String displayAndGetStoreageString(unsigned long int storeageCounter)
 	dataWriteToFileStr += ",";
 
 	LcdDisplay(VOC_X, VOC_Y, 48, hz[VOC_HZ_INDEX], 1); //Voc
-	LcdDisplay(VOC_X + 150, VOC_Y, 48, hz[VOC_HZ_INDEX + getVoc()], 12); //Voc
+//	LcdDisplay(VOC_X + 150, VOC_Y, 48, hz[VOC_HZ_INDEX + getVoc()], 12); //Voc
 
 	//BME280 Pressure
 	LcdDisplay(BME_X, BME_Y, 48, hz[BME_HZ_INDEX], 1);
@@ -198,12 +201,20 @@ String displayAndGetStoreageString(unsigned long int storeageCounter)
 	dataWriteToFileStr += ",";
 
 	//GP2Y10 Dust
-        LcdDisplay(GP2Y10_X, GP2Y10_Y, 48, "PM2.5: ", 1);              //湿度：
+//        LcdDisplay(GP2Y10_X, GP2Y10_Y, 48, "PM2.5: ", 1);             
         float dust = getDustDensity();
         if(dust>0)
           dtostrf(dust, 6, 2, dust_buf);
 	LcdDisplay(GP2Y10_X + 150 , GP2Y10_Y, 48, dust_buf, 16); 
 	dataWriteToFileStr += dust_buf;  //String data write to file.
+	dataWriteToFileStr += ",";
+
+	//Temprature2: display and storeage.
+	int chk2 = DHT11_2.read(DHT_PIN_2);                 //将读取到的值赋给chk
+        dtostrf(DHT11_2.temperature, 2, 0, temp_buf);
+	LcdDisplay(TEMP_X + 450, TEMP_Y, 48, temp_buf, 12); // DHT11.temperature
+	dataWriteToFileStr += temp_buf;  //String data write to file.
+
 	return dataWriteToFileStr;
 }
 
