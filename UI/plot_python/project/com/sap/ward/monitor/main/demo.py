@@ -5,13 +5,13 @@ import matplotlib.dates as mdate
 import time  
 import os
 
-RECORD_NAME = "06032014-livingRoom-hermetic-12h"
+RECORD_NAME = "06250811-livingRoom-hermetic-24h"
 # ROOM = "slaveBedroom"
 # ROOM = "mainBedroom"
 ROOM = "livingRoom"
 # ROOM = "kitchen"
 
-AVERAGE = 5
+AVERAGE = 20
 
 PLOT_PYTHON_PATH = os.path.abspath('../../../../../../')
 RECORD_TXT_FILE_NAME = PLOT_PYTHON_PATH + "\\records" + "\\" + ROOM + "\\" + RECORD_NAME + ".TXT"
@@ -22,10 +22,12 @@ num = []
 date_time = []
 hcho = []
 temp = []
+humi = []
 lux = []
 sum_lux = 0
 sum_hcho = 0
 sum_temp = 0
+sum_humi = 0
 index = 0
 security_hcho = []
 SECURITY_HCHO = 0.08
@@ -41,6 +43,7 @@ while line:
         if(lineData[0].isdigit()):
             sum_hcho += float(lineData[2])
             sum_temp += float(lineData[4])
+            sum_humi += float(lineData[5])
             sum_lux += float(lineData[6])
 #             print(lineData[0],lineData[2],lineData[4])
             if(0 == index % AVERAGE):
@@ -52,9 +55,11 @@ while line:
                 num.append(index / AVERAGE)  # Number
                 hcho.append(round((sum_hcho / float(AVERAGE)), 2))  # Hcho
                 temp.append(round((sum_temp / float(AVERAGE)), 2))  # Temperature
+                humi.append(round((sum_humi / float(AVERAGE)), 2))  # Huminity
                 lux.append(round((sum_lux / float(AVERAGE)), 2))  # Lux
                 sum_hcho = 0  
                 sum_temp = 0
+                sum_humi = 0
                 sum_lux = 0
 print(num)
 print(hcho)
@@ -69,6 +74,7 @@ plt.xlabel('Time', size=12)
 plt.ylabel('Temperature & HCHO', size=12)
 plt.grid()  
  
+# plt.plot(date_time, temp, color='b', linestyle='-', label='Temperature')  
 plt.plot(date_time, temp, color='b', linestyle='-', label='Temperature')  
 # ax2.plot(date_time, lux, color='r', linestyle='-', label='Lux')  
 plt.legend(loc='lower left')
@@ -90,10 +96,11 @@ ax2.xaxis.set_major_formatter(mdate.DateFormatter('%m-%d %H:%M:%S'))  # 设置�
 #### Plot 2
 plt.subplot(2, 1, 2)
 plt.xlabel('Time', size=12)  
-plt.ylabel('Temperature & Lux', size=12)
+plt.ylabel('Huminity & Lux', size=12)
 plt.grid()  
  
-plt.plot(date_time, temp, color='b', linestyle='-', label='Temperature')  
+# plt.plot(date_time, temp, color='b', linestyle='-', label='Temperature')  
+plt.plot(date_time, humi, color='y', linestyle='-', label='Huminity')  
 # ax2.plot(date_time, lux, color='r', linestyle='-', label='Lux')  
 plt.legend(loc='lower left')
  
