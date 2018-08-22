@@ -12,7 +12,7 @@
 
 ## Overview of Hardware && Dev env 
 
-![](/doc/pictures/EnvironmentMonitor/2.jpg)![](/doc/pictures/EnvironmentMonitor/3.jpg)
+![](/doc/pictures/EnvironmentMonitor/1.jpg)![](/doc/pictures/EnvironmentMonitor/3.jpg)
 
 
 
