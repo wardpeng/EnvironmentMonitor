@@ -14,7 +14,7 @@
 
 ![](/doc/pictures/EnvironmentMonitor/1.jpg)
 
-![](/doc/pictures/EnvironmentMonitor/2.jpg)![](/doc/pictures/EnvironmentMonitor/3.jpg)
+
 
 
 
@@ -26,4 +26,3 @@
 
 ## Home
 
-![](doc/pictures/home.jpg)
